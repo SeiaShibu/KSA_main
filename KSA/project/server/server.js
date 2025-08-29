@@ -20,13 +20,25 @@ const app = express();
 // Middleware
 // ======================
 app.use(helmet());
+
+// CORS setup for multiple frontends
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? 'https://ksa-main.vercel.app' // your deployed frontend
-    : 'http://localhost:5173',      // local dev
-  credentials: true
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:5173',         // local dev
+      'https://ksa-main.vercel.app',   // Vercel frontend
+      'https://ksa-main.onrender.com', // Render frontend
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
 
+// Logging
 app.use(morgan('combined'));
 
 // Rate limiting
