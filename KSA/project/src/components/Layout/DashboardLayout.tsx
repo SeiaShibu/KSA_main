@@ -1,6 +1,8 @@
-import React, { ReactNode } from 'react';
+// src/components/Layout/DashboardLayout.tsx
+import React, { ReactNode, useState } from 'react';
 import { motion } from 'framer-motion';
 import Sidebar from './Sidebar';
+import { Menu } from 'lucide-react';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -8,17 +10,42 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title }) => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex flex-col md:flex-row">
-      {/* Sidebar: hidden on mobile */}
-      <aside className="hidden md:block w-64 min-h-screen bg-white shadow-md">
-        <Sidebar />
-      </aside>
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-      {/* Main content */}
+  return (
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+      
+      {/* Mobile Hamburger */}
+      <div className="md:hidden p-4">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="p-2 rounded-md bg-gray-200"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+      </div>
+
+      {/* Sidebar */}
+      <motion.aside
+        initial={{ x: '-100%' }}
+        animate={{ x: sidebarOpen ? 0 : '-100%' }}
+        className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-50 md:static md:translate-x-0 md:flex md:flex-col"
+      >
+        <Sidebar closeSidebar={() => setSidebarOpen(false)} />
+      </motion.aside>
+
+      {/* Overlay on mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Main Content */}
       <main className="flex-1 p-4 md:p-8">
         {title && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
@@ -27,7 +54,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title }) =>
             <div className="w-20 h-1 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full"></div>
           </motion.div>
         )}
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
