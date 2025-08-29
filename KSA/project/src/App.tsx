@@ -23,7 +23,6 @@ import AssignedComplaints from './pages/Technician/AssignedComplaints';
 // Admin
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import AllComplaints from './pages/Admin/AllComplaints';
-import CreateUser from './pages/Admin/CreateUser';
 
 // Role-based redirect after login
 const RoleRedirect = () => {
@@ -125,14 +124,7 @@ function App() {
             }
           />
          
-          <Route
-            path="/admin/create-user"
-            element={
-              <PrivateRoute role="admin">
-                <CreateUser />
-              </PrivateRoute>
-            }
-          />
+          
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
