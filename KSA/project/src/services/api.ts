@@ -1,7 +1,8 @@
-// API base URL – will use Render backend in production, localhost in dev
-const API_BASE = process.env.REACT_APP_API_BASE || 'https://ksa-main.onrender.com/api';
+// src/api.ts// src/api/index.ts (or wherever you call the backend)
+const API_BASE =
+  import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
 
-// Function to get auth headers
+// Get auth headers
 const authHeader = () => {
   const token = localStorage.getItem('token');
   return {
@@ -36,17 +37,7 @@ export const complaintsAPI = {
     return res.json();
   },
 
-  assign: async (complaintId: string, technicianId: string) => {
-    const res = await fetch(`${API_BASE}/complaints/${complaintId}/assign`, {
-      method: 'PUT',
-      headers: authHeader(),
-      body: JSON.stringify({ technicianId }),
-    });
-    if (!res.ok) throw new Error('Failed to assign complaint');
-    return res.json();
-  },
-
-  updateComplaintStatus: async (complaintId: string, status: string, details?: string) => {
+  updateStatus: async (complaintId: string, status: string, details?: string) => {
     const res = await fetch(`${API_BASE}/complaints/${complaintId}`, {
       method: 'PUT',
       headers: authHeader(),
