@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Navbar from './components/Navbar';
 import { PrivateRoute } from './components/PrivateRoute';
-import Layout from "./components/Layout/Layout";
+import Layout from "./components/Layout/layout";
 
 // Pages
 import Home from './pages/Home';
