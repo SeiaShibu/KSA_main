@@ -22,18 +22,17 @@ const app = express();
 app.use(helmet());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? 'https://yourdomain.com' 
-    : 'http://localhost:5173',
+    ? 'https://ksa-main.vercel.app' // your deployed frontend
+    : 'http://localhost:5173',      // local dev
   credentials: true
 }));
 
-// Logging
 app.use(morgan('combined'));
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per window
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 100
 });
 app.use(limiter);
 
