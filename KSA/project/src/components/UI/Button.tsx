@@ -1,57 +1,50 @@
-import React, { ReactNode, ButtonHTMLAttributes } from 'react';
-import { motion } from 'framer-motion';
-import { Loader } from 'lucide-react';
+// src/components/UI/Button.tsx
+import React from "react";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'danger' | 'success';
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "danger" | "default";
+  size?: "sm" | "md" | "lg"; // ✅ Add size here
   loading?: boolean;
-  fullWidth?: boolean;
 }
+
+const variantClasses: Record<string, string> = {
+  primary: "bg-amber-400 text-black hover:bg-amber-500",
+  secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300",
+  danger: "bg-red-500 text-white hover:bg-red-600",
+  default: "bg-gray-100 text-gray-700",
+};
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  variant = 'primary',
-  loading = false,
-  fullWidth = false,
-  className = '',
-  disabled,
+  variant = "primary",
+  size = "md",
+  loading,
+  className = "",
   ...props
 }) => {
-  const getVariantClasses = () => {
-    switch (variant) {
-      case 'primary':
-        return 'bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-lg hover:shadow-xl';
-      case 'secondary':
-        return 'bg-white/80 text-gray-700 border border-gray-300 shadow-md hover:shadow-lg';
-      case 'danger':
-        return 'bg-gradient-to-r from-red-400 to-red-500 text-white shadow-lg hover:shadow-xl';
-      case 'success':
-        return 'bg-gradient-to-r from-green-400 to-green-500 text-white shadow-lg hover:shadow-xl';
-      default:
-        return 'bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-lg hover:shadow-xl';
-    }
-  };
+  let sizeClass = "";
+  switch (size) {
+    case "sm":
+      sizeClass = "px-3 py-1 text-sm";
+      break;
+    case "md":
+      sizeClass = "px-4 py-2 text-base";
+      break;
+    case "lg":
+      sizeClass = "px-6 py-3 text-lg";
+      break;
+  }
 
   return (
-    <motion.button
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.98 }}
-      disabled={disabled || loading}
-      className={`
-        px-6 py-3 rounded-xl font-medium transition-all duration-200
-        disabled:opacity-50 disabled:cursor-not-allowed
-        ${getVariantClasses()}
-        ${fullWidth ? 'w-full' : ''}
-        ${className}
-      `}
+    <button
+      className={`rounded-xl font-medium flex items-center justify-center ${variantClasses[variant]} ${sizeClass} ${className} ${
+        loading ? "opacity-70 cursor-not-allowed" : ""
+      }`}
+      disabled={loading}
       {...props}
     >
-      <div className="flex items-center justify-center space-x-2">
-        {loading && <Loader className="w-4 h-4 animate-spin" />}
-        <span>{children}</span>
-      </div>
-    </motion.button>
+      {children}
+    </button>
   );
 };
 
