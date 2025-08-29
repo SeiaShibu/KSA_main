@@ -21,22 +21,26 @@ const app = express();
 // ======================
 app.use(helmet());
 
-// CORS setup for multiple frontends
+// CORS setup for local dev + deployed frontend
+const allowedOrigins = [
+  'http://localhost:5173',        // local dev
+  'https://ksa-main.vercel.app',  // deployed frontend
+];
+
 app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'http://localhost:5173',         // local dev
-      'https://ksa-main.vercel.app',   // Vercel frontend
-      'https://ksa-main.onrender.com', // Render frontend
-    ];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+  origin: function(origin, callback){
+    if (!origin) return callback(null, true); // allow non-browser requests
+    if (allowedOrigins.indexOf(origin) === -1){
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
     }
+    return callback(null, true);
   },
   credentials: true,
 }));
+
+// Enable preflight requests for all routes
+app.options('*', cors());
 
 // Logging
 app.use(morgan('combined'));
