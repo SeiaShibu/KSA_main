@@ -2,9 +2,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider,useAuth } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import Navbar from './components/Navbar';
 import { PrivateRoute } from './components/PrivateRoute';
+import Layout from "./components/Layout/Layout";
 
 // Pages
 import Home from './pages/Home';
@@ -54,81 +55,84 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        {/* Navbar stays at top */}
         <Navbar />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<RoleRedirect />} />
 
-          {/* Customer Routes */}
-          <Route
-            path="/customer"
-            element={
-              <PrivateRoute role="customer">
-                <CustomerDashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/customer/new-complaint"
-            element={
-              <PrivateRoute role="customer">
-                <NewComplaint />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/customer/complaints"
-            element={
-              <PrivateRoute role="customer">
-                <MyComplaints />
-              </PrivateRoute>
-            }
-          />
+        {/* Wrap all pages inside Layout for mobile-friendly container */}
+        <Layout>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<RoleRedirect />} />
 
-          {/* Technician Routes */}
-          <Route
-            path="/technician"
-            element={
-              <PrivateRoute role="technician">
-                <TechnicianDashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/technician/complaints"
-            element={
-              <PrivateRoute role="technician">
-                <AssignedComplaints />
-              </PrivateRoute>
-            }
-          />
+            {/* Customer Routes */}
+            <Route
+              path="/customer"
+              element={
+                <PrivateRoute role="customer">
+                  <CustomerDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/customer/new-complaint"
+              element={
+                <PrivateRoute role="customer">
+                  <NewComplaint />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/customer/complaints"
+              element={
+                <PrivateRoute role="customer">
+                  <MyComplaints />
+                </PrivateRoute>
+              }
+            />
 
-          {/* Admin Routes */}
-          <Route
-            path="/admin"
-            element={
-              <PrivateRoute role="admin">
-                <AdminDashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/complaints"
-            element={
-              <PrivateRoute role="admin">
-                <AllComplaints />
-              </PrivateRoute>
-            }
-          />
-         
-          
+            {/* Technician Routes */}
+            <Route
+              path="/technician"
+              element={
+                <PrivateRoute role="technician">
+                  <TechnicianDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/technician/complaints"
+              element={
+                <PrivateRoute role="technician">
+                  <AssignedComplaints />
+                </PrivateRoute>
+              }
+            />
 
-          {/* Catch-all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+            {/* Admin Routes */}
+            <Route
+              path="/admin"
+              element={
+                <PrivateRoute role="admin">
+                  <AdminDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/complaints"
+              element={
+                <PrivateRoute role="admin">
+                  <AllComplaints />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Catch-all */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Layout>
 
         {/* Toast Notifications */}
         <Toaster
