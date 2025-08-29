@@ -5,9 +5,9 @@ import { MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const services = [
-  { title: 'Plumbing', desc: 'High-quality plumbing services you can trust.' },
-  { title: 'Electrical', desc: 'Reliable electrical solutions for your home and office.' },
-  { title: 'Carpentry', desc: 'Expert carpentry services with attention to detail.' },
+  { title: 'ABC', desc: 'High-quality plumbing services you can trust.' },
+  { title: 'ABC', desc: 'Reliable electrical solutions for your home and office.' },
+  { title: 'ABC', desc: 'Expert carpentry services with attention to detail.' },
 ];
 
 const Home = () => {
@@ -19,7 +19,7 @@ const Home = () => {
           <div className="w-12 h-12 bg-gradient-to-r from-amber-400 to-orange-400 rounded-2xl flex items-center justify-center shadow-md hover:shadow-xl transition-shadow duration-300">
             <MessageSquare className="w-6 h-6 text-white animate-bounce" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 tracking-wide">NSA Maintenance</h1>
+          <h1 className="text-2xl font-bold text-gray-800 tracking-wide">KSA Maintenance</h1>
         </div>
         <div className="space-x-6">
           <Link to="/" className="text-gray-700 hover:text-amber-600 transition">Home</Link>
@@ -50,7 +50,7 @@ const Home = () => {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="text-5xl font-extrabold mb-4 text-gray-800 tracking-tight"
         >
-          Welcome to NSA Maintenance
+          Welcome to KSA Maintenance
         </motion.h2>
         <motion.p
           initial={{ opacity: 0 }}
@@ -122,7 +122,7 @@ const Home = () => {
           className="max-w-3xl mx-auto bg-white rounded-3xl p-10 shadow-lg"
         >
           <p className="text-gray-700 text-lg leading-relaxed">
-            NSA Maintenance is a trusted maintenance service provider delivering excellence
+            KSA Maintenance is a trusted maintenance service provider delivering excellence
             in plumbing, electrical, and carpentry services. Our team ensures quality, reliability,
             and customer satisfaction in every project.
           </p>
