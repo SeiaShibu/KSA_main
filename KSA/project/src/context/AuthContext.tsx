@@ -1,7 +1,7 @@
 // src/context/AuthContext.tsx
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { supabase } from "../config/supabaseClient";
-import { User as SupabaseUser, Session } from "@supabase/supabase-js";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 
 interface UserType {
   id: string;
@@ -21,13 +21,16 @@ interface AuthContextType {
 // Create context
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-// Helper: map Supabase user to our UserType
+// Map Supabase user to our UserType
 const mapSupabaseUser = (supaUser: SupabaseUser): UserType => ({
   id: supaUser.id,
   email: supaUser.email ?? "",
-  role: "customer", // default, you can extend later
+  role: "customer",
   name: supaUser.user_metadata?.name ?? undefined,
 });
+
+// API base
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
@@ -39,14 +42,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const initAuth = async () => {
       try {
         // Get current session
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-
-        if (session?.user) {
-          setUser(mapSupabaseUser(session.user));
-        }
-
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) setUser(mapSupabaseUser(session.user));
         setLoading(false);
 
         // Subscribe to auth changes
@@ -62,17 +59,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     initAuth();
 
-    // Cleanup
     return () => {
       if (listener && listener.data?.subscription) listener.data.subscription.unsubscribe();
     };
   }, []);
 
-  // Register user via backend API
+  // Register
   const register = async (name: string, email: string, password: string) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -90,11 +86,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Login user via backend API
+  // Login
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${API_BASE}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -117,7 +113,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await supabase.auth.signOut();
     setUser(null);
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("customer");
   };
 
   return (
