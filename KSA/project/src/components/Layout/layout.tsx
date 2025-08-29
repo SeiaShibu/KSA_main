@@ -1,8 +1,7 @@
 // src/components/Layout/Layout.tsx
 import React, { ReactNode, useState } from 'react';
-import Sidebar, { SidebarProps } from './Sidebar';
 import { motion } from 'framer-motion';
-import { Menu } from 'lucide-react';
+import Sidebar from './Sidebar';
 
 interface LayoutProps {
   children: ReactNode;
@@ -15,8 +14,9 @@ const Layout: React.FC<LayoutProps> = ({ children, title, showSidebar = true }) 
 
   return (
     <div
-      className={`min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50
-        ${showSidebar ? 'flex flex-col md:flex-row' : 'flex flex-col items-center'}`}
+      className={`min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 ${
+        showSidebar ? 'flex flex-col md:flex-row' : 'flex flex-col items-center'
+      }`}
     >
       {/* Mobile overlay */}
       {sidebarOpen && showSidebar && (
@@ -34,14 +34,12 @@ const Layout: React.FC<LayoutProps> = ({ children, title, showSidebar = true }) 
           transition={{ type: 'tween' }}
           className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-50 md:static md:flex md:flex-col md:translate-x-0"
         >
-          <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+          <Sidebar closeSidebar={() => setSidebarOpen(false)} />
         </motion.aside>
       )}
 
-      {/* Main Content */}
-      <main
-        className={`flex-1 p-4 md:p-8 ${!showSidebar ? 'mx-auto max-w-4xl w-full' : ''}`}
-      >
+      {/* Main content */}
+      <main className={`flex-1 p-4 md:p-8 ${!showSidebar ? 'mx-auto max-w-4xl w-full' : ''}`}>
         {/* Mobile Hamburger */}
         {showSidebar && (
           <div className="md:hidden mb-4">
@@ -49,16 +47,15 @@ const Layout: React.FC<LayoutProps> = ({ children, title, showSidebar = true }) 
               onClick={() => setSidebarOpen(true)}
               className="p-2 bg-gray-200 rounded-md"
             >
-              <Menu className="w-6 h-6" />
+              ☰
             </button>
           </div>
         )}
 
-        {/* Title */}
+        {/* Optional Title */}
         {title && (
           <div className={`mb-6 ${!showSidebar ? 'text-center' : ''}`}>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">{title}</h1>
-            <div className="w-20 h-1 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full mx-auto"></div>
+            <h1 className="text-3xl font-bold text-gray-800">{title}</h1>
           </div>
         )}
 
